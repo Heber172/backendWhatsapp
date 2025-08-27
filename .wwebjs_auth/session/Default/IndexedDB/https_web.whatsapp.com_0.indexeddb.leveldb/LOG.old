@@ -1,0 +1,15 @@
+2025/08/12-10:27:49.943 2840 Reusing MANIFEST C:\Users\Smile\Desktop\MENSAJE MASIVOS UNIP\PRUEBA1\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/08/12-10:27:49.944 2840 Recovering log #243
+2025/08/12-10:27:49.945 2840 Reusing old log C:\Users\Smile\Desktop\MENSAJE MASIVOS UNIP\PRUEBA1\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000243.log 
+2025/08/12-10:27:49.945 2840 Delete type=2 #242
+2025/08/12-10:27:49.958 28cc Level-0 table #248: started
+2025/08/12-10:27:49.961 28cc Level-0 table #248: 7534 bytes OK
+2025/08/12-10:27:49.963 28cc Delete type=0 #243
+2025/08/12-10:27:49.963 28cc Manual compaction at level-0 from '\x00O\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00P\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/08/12-10:27:49.963 28cc Manual compaction at level-1 from '\x00O\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00P\x00\x00\x00' @ 0 : 0; will stop at '\x00O\x06 \x03\x00\x00\x00\x00\x00\x80V@\x00\x01\x0b\x00I\x00d\x00T\x00t\x00l\x009\x000\x00D\x00a\x00y\x00s' @ 654976 : 1
+2025/08/12-10:27:49.963 28cc Compacting 1@1 + 1@2 files
+2025/08/12-10:27:49.968 28cc Generated table #249@1: 503 keys, 23418 bytes
+2025/08/12-10:27:49.968 28cc Compacted 1@1 + 1@2 files => 23418 bytes
+2025/08/12-10:27:49.969 28cc compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/08/12-10:27:49.969 28cc Delete type=2 #248
+2025/08/12-10:27:49.970 28cc Manual compaction at level-1 from '\x00O\x06 \x03\x00\x00\x00\x00\x00\x80V@\x00\x01\x0b\x00I\x00d\x00T\x00t\x00l\x009\x000\x00D\x00a\x00y\x00s' @ 654976 : 1 .. '\x00P\x00\x00\x00' @ 0 : 0; will stop at (end)
