@@ -2,7 +2,7 @@ const { Client } = require('whatsapp-web.js');
 const qrcode = require('qrcode');
 const qrcodeTerminal = require('qrcode-terminal');
 const { io } = require('../../app');
-
+const EstadoWhatsapp = require('../models/estadowhatsappModelo.js');
 // Almacenar datos de clientes por usuario
 const clients = {};
 
@@ -11,6 +11,7 @@ function emitirEstado(cod_usuario) {
     if (!clients[cod_usuario]) {
         io.to(cod_usuario).emit("estado_whatsapp", { conectado: false });
     } else {
+
         io.to(cod_usuario).emit("estado_whatsapp", { conectado: clients[cod_usuario].clientReady });
     }
 }
@@ -48,17 +49,29 @@ function createClient(cod_usuario) {
     });
 
     // Evento ready
-    client.on('ready', () => {
+    client.on('ready', async () => {
         console.log(`Cliente ${cod_usuario} está listo`);
         clients[cod_usuario].clientReady = true;
         clients[cod_usuario].qrAttempts = 0;
+
+        // Obtener estado de sesion de whatsapp existente
+        const estadoSession = await EstadoWhatsapp.getestadoWhatsappPorUsuario(cod_usuario);
+        // Alternar estado
+        let estado = estadoSession[0].estado === 1 ? 0 : 1; 
+
+        const result = await EstadoWhatsapp.actualizarEstadoDeWhatsapp(cod_usuario, estado);
 
         io.to(cod_usuario).emit("ready");
         emitirEstado(cod_usuario);
     });
 
     // Evento de desconexión
-    client.on('disconnected', (reason) => {
+    client.on('disconnected', async (reason) => {
+                // Obtener estado de sesion de whatsapp existente
+        const estadoSession = await EstadoWhatsapp.getestadoWhatsappPorUsuario(cod_usuario);
+        if(estadoSession[0].estado === 1){
+            await EstadoWhatsapp.actualizarEstadoDeWhatsapp(cod_usuario, 0);
+        }
         console.log(`Cliente ${cod_usuario} desconectado: ${reason}`);
         clients[cod_usuario].clientReady = false;
 
@@ -67,6 +80,7 @@ function createClient(cod_usuario) {
 
         if (reason !== 'LOGOUT') {
             setTimeout(() => {
+
                 console.log(`Reintentando conexión para usuario ${cod_usuario}`);
                 client.initialize();
             }, 5000);
@@ -122,6 +136,7 @@ async function cerrarSesion(req, res) {
     try {
         await clients[cod_usuario].client.logout();
         delete clients[cod_usuario];
+
         io.to(cod_usuario).emit("session_closed");
         emitirEstado(cod_usuario);
 

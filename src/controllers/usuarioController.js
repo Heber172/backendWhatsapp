@@ -10,6 +10,7 @@ const { Status } = require('whatsapp-web.js');
 const Rol = require('../models/rolModelo');
 const helpers = require('../helpers/helpers');
 const Configuracion = require('../models/configuracionModelo.js');
+const EstadoWhatsapp = require('../models/estadowhatsappModelo.js');
 exports.login = async (req, res) => {
     const { nombreUsuario, contrasena } = req.body;
     let intento = 0;
@@ -79,6 +80,7 @@ exports.login = async (req, res) => {
         );
         await whatsappController.iniciarUsuario(usuarioEncontrado[0].cod_usuario);
         const permisos = await Rol.getRolesPermsosPorRol(usuarioEncontrado[0].cod_rol);
+        const estadoWhatsapp = await EstadoWhatsapp.getestadoWhatsappPorUsuario(usuarioEncontrado[0].cod_usuario);
         if(usuarioEncontrado[0].estado === 2){
             return res.status(401).json({
                 status: false,
@@ -96,8 +98,9 @@ exports.login = async (req, res) => {
                     nombreUsuario: usuarioEncontrado[0].nombreUsuario,
                     foto: usuarioEncontrado[0].foto,
                     estado: usuarioEncontrado[0].estado,
-                    permisos: permisos
                 },
+                permiso: permisos,
+                estadoWhatsapp: estadoWhatsapp[0].estado,
                 token: token// solo primer resultado
             });    
         }
@@ -145,6 +148,7 @@ exports.guardarUsuario = async (req, res) => {
 
     const id = await Usuario.guardarUsuario(usuario);
     const result = await Configuracion.guardarConfiguracion(id);
+    await EstadoWhatsapp.guardarEstadoDeWhatsapp(id);
     res.status(201).json({
       message: "Usuario creado con éxito",
       status: true
